@@ -16,7 +16,7 @@ import static me.winter.gdx.utils.io.StreamUtil.readUnsignedShort;
  *
  * @author Alexander Winter
  */
-public class HydraIMod implements CustomSerializable {
+public class HydraModList implements CustomSerializable {
 	// unsigned short
 	int modSrcOper, modDestOper;
 	short modAmount;

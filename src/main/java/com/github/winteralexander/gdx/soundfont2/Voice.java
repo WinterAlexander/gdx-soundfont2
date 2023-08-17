@@ -16,5 +16,5 @@ public class Voice {
 	int playIndex, loopStart, loopEnd;
 	VoiceEnvelope ampEnv, modEnv;
 	VoiceLowPass lowpass;
-	VoiceLFO modLfo, vibLfo;
+	VoiceLowFrequencyOscillator modLfo, vibLfo;
 }

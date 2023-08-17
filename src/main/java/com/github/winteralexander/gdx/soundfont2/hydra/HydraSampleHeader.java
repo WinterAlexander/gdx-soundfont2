@@ -1,5 +1,6 @@
 package com.github.winteralexander.gdx.soundfont2.hydra;
 
+import com.github.winteralexander.gdx.soundfont2.SampleLinkType;
 import me.winter.gdx.utils.io.CustomSerializable;
 
 import java.io.IOException;
@@ -16,15 +17,17 @@ import static me.winter.gdx.utils.io.StreamUtil.*;
  *
  * @author Alexander Winter
  */
-public class HydraSHdr implements CustomSerializable {
+public class HydraSampleHeader implements CustomSerializable {
 	String sampleName;
 	// unsigned int
 	int start, end, startLoop, endLoop, sampleRate;
 	// unsigned byte
 	int originalPitch;
 	byte pitchCorrection;
+
 	// unsighed short
-	int sampleLink, sampleType;
+	int sampleLink;
+	SampleLinkType sampleType;
 
 	@Override
 	public void readFrom(InputStream input) throws IOException {
@@ -37,7 +40,7 @@ public class HydraSHdr implements CustomSerializable {
 		originalPitch = readUnsignedByte(input);
 		pitchCorrection = readByte(input);
 		sampleLink = readUnsignedShort(input);
-		sampleType = readUnsignedShort(input);
+		sampleType = SampleLinkType.fromValue(readUnsignedShort(input));
 	}
 
 	@Override

@@ -15,7 +15,7 @@ import static me.winter.gdx.utils.io.StreamUtil.readUnsignedShort;
  *
  * @author Alexander Winter
  */
-public class HydraPBag implements CustomSerializable {
+public class HydraPresetBag implements CustomSerializable {
 	int genNdx, modNdx;
 
 	@Override

@@ -15,7 +15,7 @@ import static me.winter.gdx.utils.io.StreamUtil.readUnsignedShort;
  *
  * @author Alexander Winter
  */
-public class HydraGenAmount implements CustomSerializable {
+public class HydraGeneratorAmount implements CustomSerializable {
 	int low, high;
 	short shortAmount;
 	short wordAmount;

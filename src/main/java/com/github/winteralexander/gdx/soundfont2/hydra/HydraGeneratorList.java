@@ -15,9 +15,10 @@ import static me.winter.gdx.utils.io.StreamUtil.readUnsignedShort;
  *
  * @author Alexander Winter
  */
-public class HydraPGen implements CustomSerializable {
+public class HydraGeneratorList implements CustomSerializable {
+	// unsigned short
 	int genOper;
-	HydraGenAmount genAmount = new HydraGenAmount();
+	HydraGeneratorAmount genAmount = new HydraGeneratorAmount();
 
 	@Override
 	public void readFrom(InputStream input) throws IOException {

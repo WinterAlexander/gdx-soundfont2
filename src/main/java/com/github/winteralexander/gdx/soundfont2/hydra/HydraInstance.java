@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import static com.github.winteralexander.gdx.soundfont2.SerializationUtilPlus.readAsciiCharArray;
 import static me.winter.gdx.utils.io.StreamUtil.readUnsignedShort;
 
 /**
@@ -15,15 +16,14 @@ import static me.winter.gdx.utils.io.StreamUtil.readUnsignedShort;
  *
  * @author Alexander Winter
  */
-public class HydraIGen implements CustomSerializable {
-	// unsigned int
-	int genOper;
-	HydraGenAmount genAmount = new HydraGenAmount();
+public class HydraInstance implements CustomSerializable {
+	String instName;
+	int instBagNdx;
 
 	@Override
 	public void readFrom(InputStream input) throws IOException {
-		genOper = readUnsignedShort(input);
-		genAmount.readFrom(input);
+		instName = new String(readAsciiCharArray(input, 20));
+		instBagNdx = readUnsignedShort(input);
 	}
 
 	@Override

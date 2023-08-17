@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import static com.github.winteralexander.gdx.soundfont2.SerializationUtilPlus.readAsciiCharArray;
+import static me.winter.gdx.utils.io.StreamUtil.readInt;
+import static me.winter.gdx.utils.io.StreamUtil.readUnsignedShort;
 
 /**
  * TODO Undocumented :(
@@ -15,21 +17,24 @@ import static com.github.winteralexander.gdx.soundfont2.SerializationUtilPlus.re
  *
  * @author Alexander Winter
  */
-public class HydraPHdr implements CustomSerializable
-{
+public class HydraPHdr implements CustomSerializable {
 	String presetName;
 	int preset, bank, presetBagNdx;
-	long library, genre, morphology;
+	int library, genre, morphology; // unsigned
 
 	@Override
-	public void readFrom(InputStream inputStream) throws IOException
-	{
-		presetName = new String(readAsciiCharArray(inputStream, 20));
+	public void readFrom(InputStream input) throws IOException {
+		presetName = new String(readAsciiCharArray(input, 20));
+		preset = readUnsignedShort(input);
+		bank = readUnsignedShort(input);
+		presetBagNdx = readUnsignedShort(input);
+		library = readInt(input);
+		genre = readInt(input);
+		morphology = readInt(input);
 	}
 
 	@Override
-	public void writeTo(OutputStream outputStream) throws IOException
-	{
+	public void writeTo(OutputStream outputStream) throws IOException {
 
 	}
 }

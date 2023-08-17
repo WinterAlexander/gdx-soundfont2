@@ -7,8 +7,7 @@ package com.github.winteralexander.gdx.soundfont2;
  *
  * @author Alexander Winter
  */
-public class Channel
-{
+public class Channel {
 	int presetIndex, bank, pitchWheel, midiPan, midiVolume, midiExpression, midiRPN, midiData;
 	float panOffset, gainDB, pitchRange, tuning;
 }

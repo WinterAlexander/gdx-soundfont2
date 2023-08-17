@@ -7,8 +7,7 @@ package com.github.winteralexander.gdx.soundfont2;
  *
  * @author Alexander Winter
  */
-public class VoiceLFO
-{
+public class VoiceLFO {
 	int samplesUntil;
 	float level, delta;
 }

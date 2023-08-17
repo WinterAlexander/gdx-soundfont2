@@ -7,8 +7,7 @@ package com.github.winteralexander.gdx.soundfont2;
  *
  * @author Alexander Winter
  */
-public class VoiceEnvelope
-{
+public class VoiceEnvelope {
 	float level, slope;
 	int samplesUntilNextSegment;
 	short segment, midiVelocity;

@@ -7,8 +7,7 @@ package com.github.winteralexander.gdx.soundfont2;
  *
  * @author Alexander Winter
  */
-public class Region
-{
+public class Region {
 	int loop_mode;
 	int sample_rate;
 	byte low_key, high_key, low_velocity, high_velocity;

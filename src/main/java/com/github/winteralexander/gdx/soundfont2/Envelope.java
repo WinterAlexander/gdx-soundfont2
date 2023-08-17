@@ -7,7 +7,6 @@ package com.github.winteralexander.gdx.soundfont2;
  *
  * @author Alexander Winter
  */
-public class Envelope
-{
+public class Envelope {
 	float delay, attack, hold, decay, sustain, release, keynumToHold, keynumToDecay;
 }

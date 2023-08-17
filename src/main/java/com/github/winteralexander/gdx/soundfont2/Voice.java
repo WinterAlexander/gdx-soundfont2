@@ -7,8 +7,7 @@ package com.github.winteralexander.gdx.soundfont2;
  *
  * @author Alexander Winter
  */
-public class Voice
-{
+public class Voice {
 	int playingPreset, playingKey, playingChannel;
 	Region region;
 	double pitchInputTimecents, pitchOutputFactor;

@@ -7,8 +7,7 @@ package com.github.winteralexander.gdx.soundfont2;
  *
  * @author Alexander Winter
  */
-public class VoiceLowPass
-{
+public class VoiceLowPass {
 	double QInv, a0, a1, b1, b2, z1, z2;
 	boolean active;
 }

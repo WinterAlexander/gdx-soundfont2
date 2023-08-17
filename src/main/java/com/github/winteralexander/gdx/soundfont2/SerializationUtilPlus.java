@@ -12,13 +12,10 @@ import static me.winter.gdx.utils.io.StreamUtil.readUnsignedByte;
  *
  * @author Alexander Winter
  */
-public class SerializationUtilPlus
-{
-	public static char[] readAsciiCharArray(InputStream input, int size) throws IOException
-	{
+public class SerializationUtilPlus {
+	public static char[] readAsciiCharArray(InputStream input, int size) throws IOException {
 		char[] chars = new char[size];
-		while(size > 0)
-		{
+		while(size > 0) {
 			chars[chars.length - size] = (char)readUnsignedByte(input);
 			size--;
 		}

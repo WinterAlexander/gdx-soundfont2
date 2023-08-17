@@ -7,6 +7,7 @@ package com.github.winteralexander.gdx.soundfont2;
  *
  * @author Alexander Winter
  */
-public class RiffChunk
-{
+public class RiffChunk {
+	String id;
+	int size;
 }

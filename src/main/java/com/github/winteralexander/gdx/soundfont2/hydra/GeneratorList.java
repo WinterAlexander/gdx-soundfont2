@@ -15,13 +15,15 @@ import static me.winter.gdx.utils.io.StreamUtil.readUnsignedShort;
  *
  * @author Alexander Winter
  */
-public class HydraInstanceBag implements CustomSerializable {
-	int instGenNdx, instModNdx;
+public class GeneratorList implements CustomSerializable {
+	// unsigned short
+	int genOper;
+	GeneratorAmount genAmount = new GeneratorAmount();
 
 	@Override
 	public void readFrom(InputStream input) throws IOException {
-		instGenNdx = readUnsignedShort(input);
-		instModNdx = readUnsignedShort(input);
+		genOper = readUnsignedShort(input);
+		genAmount.readFrom(input);
 	}
 
 	@Override

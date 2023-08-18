@@ -17,7 +17,7 @@ import static me.winter.gdx.utils.io.StreamUtil.readUnsignedShort;
  *
  * @author Alexander Winter
  */
-public class HydraPresetHeader implements CustomSerializable {
+public class PresetHeader implements CustomSerializable {
 	String presetName;
 	int preset, bank, presetBagNdx;
 	int library, genre, morphology; // unsigned

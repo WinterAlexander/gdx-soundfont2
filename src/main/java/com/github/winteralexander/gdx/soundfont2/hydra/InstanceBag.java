@@ -15,22 +15,17 @@ import static me.winter.gdx.utils.io.StreamUtil.readUnsignedShort;
  *
  * @author Alexander Winter
  */
-public class HydraGeneratorAmount implements CustomSerializable {
-	int low, high;
-	short shortAmount;
-	short wordAmount;
+public class InstanceBag implements CustomSerializable {
+	int instGenNdx, instModNdx;
 
 	@Override
 	public void readFrom(InputStream input) throws IOException {
-		int data = readUnsignedShort(input);
-		low = (data & 0xFF);
-		high = (data >> 8 & 0xFF);
-		shortAmount = (short)data;
-		wordAmount = (short)data;
+		instGenNdx = readUnsignedShort(input);
+		instModNdx = readUnsignedShort(input);
 	}
 
 	@Override
-	public void writeTo(OutputStream output) throws IOException {
+	public void writeTo(OutputStream outputStream) throws IOException {
 
 	}
 }

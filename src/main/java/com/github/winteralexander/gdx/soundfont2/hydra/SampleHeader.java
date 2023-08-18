@@ -17,7 +17,7 @@ import static me.winter.gdx.utils.io.StreamUtil.*;
  *
  * @author Alexander Winter
  */
-public class HydraSampleHeader implements CustomSerializable {
+public class SampleHeader implements CustomSerializable {
 	String sampleName;
 	// unsigned int
 	int start, end, startLoop, endLoop, sampleRate;

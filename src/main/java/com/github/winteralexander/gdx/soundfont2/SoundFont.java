@@ -59,29 +59,19 @@ public class SoundFont implements CustomSerializable {
 		if(!chunkHead.id.equals("sfbk"))
 			throw new IOException("Incorrect Chunk head ID");
 
-		while(true) {
-			try {
-				chunkList.read(chunkHead, stream);
+		while(chunkHead.size >= 8) {
+			chunkList.read(chunkHead, stream);
 
-				if(chunkList.id.equals("pdta")) {
-					while(true) {
-						try {
-							innerChunk.read(chunkList, stream);
-
-
-
-						} catch(IOException ex) {
-							break;
-						}
-					}
-
-				} else if(chunkList.id.equals("sdta")) {
-
-				} else {
+			if(chunkList.id.equals("pdta")) {
+				while(chunkList.size >= 8) {
+					innerChunk.read(chunkList, stream);
 
 				}
-			} catch(IOException ex) {
-				break;
+
+			} else if(chunkList.id.equals("sdta")) {
+
+			} else {
+
 			}
 		}
 

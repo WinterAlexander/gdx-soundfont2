@@ -11,15 +11,15 @@ import com.badlogic.gdx.utils.Array;
  */
 public class Hydra
 {
-	Array<PresetHeader> phdrs = new Array<>();
-	Array<PresetBag> pbags = new Array<>();
-	Array<ModList> pmods = new Array<>();
-	Array<GeneratorList> pgens = new Array<>();
-	Array<Instance> insts = new Array<>();
-	Array<InstanceBag> ibags = new Array<>();
-	Array<ModList> imods = new Array<>();
-	Array<GeneratorList> igens = new Array<>();
-	Array<SampleHeader> shdrs = new Array<>();
+	public Array<PresetHeader> phdrs = new Array<>();
+	public Array<PresetBag> pbags = new Array<>();
+	public Array<ModList> pmods = new Array<>();
+	public Array<GeneratorList> pgens = new Array<>();
+	public Array<Instance> insts = new Array<>();
+	public Array<InstanceBag> ibags = new Array<>();
+	public Array<ModList> imods = new Array<>();
+	public Array<GeneratorList> igens = new Array<>();
+	public Array<SampleHeader> shdrs = new Array<>();
 
 	public boolean isIncomplete() {
 		return false;

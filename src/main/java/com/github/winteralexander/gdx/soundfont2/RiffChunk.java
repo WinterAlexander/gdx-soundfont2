@@ -17,7 +17,7 @@ public class RiffChunk {
 	String id;
 	int size;
 
-	public void read(RiffChunk parent, InputStream stream) throws IOException
+	public void read(InputStream stream, RiffChunk parent) throws IOException
 	{
 		if(parent != null && parent.size < 8)
 			throw new IOException("Not enough size in parent");

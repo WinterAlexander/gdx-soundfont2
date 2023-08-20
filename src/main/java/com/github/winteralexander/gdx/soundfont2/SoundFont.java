@@ -2,6 +2,7 @@ package com.github.winteralexander.gdx.soundfont2;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
+import com.github.winteralexander.gdx.soundfont2.hydra.HydraChunkType;
 import me.winter.gdx.utils.io.CustomSerializable;
 import com.github.winteralexander.gdx.soundfont2.hydra.Hydra;
 
@@ -18,7 +19,7 @@ import java.io.OutputStream;
  */
 public class SoundFont implements CustomSerializable {
 	Array<Preset> presets;
-	FloatArray fontSamples;
+	float[] fontSamples;
 	Array<Voice> voices;
 	Array<Channel> channels;
 
@@ -50,28 +51,50 @@ public class SoundFont implements CustomSerializable {
 	public void readFrom(InputStream stream) throws IOException {
 		RiffChunk chunkHead = new RiffChunk();
 		RiffChunk chunkList = new RiffChunk();
-		RiffChunk innerChunk = new RiffChunk();
+		RiffChunk chunk = new RiffChunk();
 		Hydra hydra = new Hydra();
-		Integer sampleBuffer = null;
-		int smplLength = 0;
+		byte[] sampleBuffer = null;
+		int sampleLength = 0;
 
-		chunkHead.read(null, stream);
+		chunkHead.read(stream, null);
 		if(!chunkHead.id.equals("sfbk"))
 			throw new IOException("Incorrect Chunk head ID");
 
 		while(chunkHead.size >= 8) {
-			chunkList.read(chunkHead, stream);
+			chunkList.read(stream, chunkHead);
 
 			if(chunkList.id.equals("pdta")) {
 				while(chunkList.size >= 8) {
-					innerChunk.read(chunkList, stream);
+					chunk.read(stream, chunkList);
+					boolean found = false;
+					for(HydraChunkType hydraChunkType : HydraChunkType.values) {
+						if(chunk.id.equals(hydraChunkType.getId())
+								&& chunk.size % hydraChunkType.getSizeInFile() == 0) {
+							found = true;
 
+							int count = chunk.size / hydraChunkType.getSizeInFile();
+							hydra.readHydraChunks(stream, hydraChunkType, count);
+							break;
+						}
+					}
+
+					if(!found)
+						if(stream.skip(chunk.size) != chunk.size)
+							throw new IOException("Unable to skip chunk");
 				}
-
 			} else if(chunkList.id.equals("sdta")) {
+				while(chunkList.size >= 8) {
+					chunk.read(stream, chunkList);
 
+					if(chunk.id.equals("smpl") && sampleBuffer == null && chunk.size >= 2) {
+						sampleLength = chunk.size;
+						sampleBuffer = loadSamples(stream, sampleLength);
+					} else if(stream.skip(chunk.size) != chunk.size)
+						throw new IOException("Unable to skip chunk");
+				}
 			} else {
-
+				if(stream.skip(chunkList.size) != chunkList.size)
+					throw new IOException("Unable to skip chunk");
 			}
 		}
 
@@ -81,6 +104,16 @@ public class SoundFont implements CustomSerializable {
 		if(sampleBuffer == null)
 			throw new IOException("No sample data");
 
+	}
+
+	private byte[] loadSamples(InputStream stream, int sampleLength) throws IOException {
+
+		byte[] buffer = new byte[sampleLength];
+
+		if(stream.read(buffer) != sampleLength)
+			throw new IOException("Incomplete sample data");
+
+		return buffer;
 	}
 
 	@Override

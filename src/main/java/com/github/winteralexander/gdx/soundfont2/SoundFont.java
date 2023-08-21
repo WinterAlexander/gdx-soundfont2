@@ -1,10 +1,9 @@
 package com.github.winteralexander.gdx.soundfont2;
 
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.FloatArray;
+import com.github.winteralexander.gdx.soundfont2.hydra.Hydra;
 import com.github.winteralexander.gdx.soundfont2.hydra.HydraChunkType;
 import me.winter.gdx.utils.io.CustomSerializable;
-import com.github.winteralexander.gdx.soundfont2.hydra.Hydra;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,7 +53,6 @@ public class SoundFont implements CustomSerializable {
 		RiffChunk chunk = new RiffChunk();
 		Hydra hydra = new Hydra();
 		byte[] sampleBuffer = null;
-		int sampleLength = 0;
 
 		chunkHead.read(stream, null);
 		if(!chunkHead.id.equals("sfbk"))
@@ -87,8 +85,7 @@ public class SoundFont implements CustomSerializable {
 					chunk.read(stream, chunkList);
 
 					if(chunk.id.equals("smpl") && sampleBuffer == null && chunk.size >= 2) {
-						sampleLength = chunk.size;
-						sampleBuffer = loadSamples(stream, sampleLength);
+						sampleBuffer = loadSamples(stream, chunk.size);
 					} else if(stream.skip(chunk.size) != chunk.size)
 						throw new IOException("Unable to skip chunk");
 				}
@@ -104,6 +101,14 @@ public class SoundFont implements CustomSerializable {
 		if(sampleBuffer == null)
 			throw new IOException("No sample data");
 
+		decodeSamples(hydra, sampleBuffer);
+	}
+
+	private void decodeSamples(Hydra hydra, byte[] sampleBuffer) {
+		fontSamples = new float[sampleBuffer.length / 2];
+		for(int i = 0; i < fontSamples.length; i++) {
+
+		}
 	}
 
 	private byte[] loadSamples(InputStream stream, int sampleLength) throws IOException {

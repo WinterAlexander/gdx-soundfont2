@@ -18,16 +18,16 @@ import static me.winter.gdx.utils.io.StreamUtil.*;
  * @author Alexander Winter
  */
 public class SampleHeader implements CustomSerializable {
-	String sampleName;
+	public String sampleName;
 	// unsigned int
-	int start, end, startLoop, endLoop, sampleRate;
+	public int start, end, startLoop, endLoop, sampleRate;
 	// unsigned byte
-	int originalPitch;
-	byte pitchCorrection;
+	public int originalPitch;
+	public byte pitchCorrection;
 
 	// unsighed short
-	int sampleLink;
-	SampleLinkType sampleType;
+	public int sampleLink;
+	public SampleLinkType sampleType;
 
 	@Override
 	public void readFrom(InputStream input) throws IOException {

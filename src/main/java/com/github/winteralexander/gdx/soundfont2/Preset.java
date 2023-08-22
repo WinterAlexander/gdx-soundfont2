@@ -1,7 +1,5 @@
 package com.github.winteralexander.gdx.soundfont2;
 
-import com.badlogic.gdx.utils.Array;
-
 /**
  * TODO Undocumented :(
  * <p>
@@ -10,6 +8,8 @@ import com.badlogic.gdx.utils.Array;
  * @author Alexander Winter
  */
 public class Preset {
-	String name;
-	Array<Region> regions;
+	public String name;
+	// unsigned short
+	public int preset, bank;
+	public Region[] regions;
 }

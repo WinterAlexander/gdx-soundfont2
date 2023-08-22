@@ -1,8 +1,7 @@
 package com.github.winteralexander.gdx.soundfont2;
 
 import com.badlogic.gdx.utils.Array;
-import com.github.winteralexander.gdx.soundfont2.hydra.Hydra;
-import com.github.winteralexander.gdx.soundfont2.hydra.HydraChunkType;
+import com.github.winteralexander.gdx.soundfont2.hydra.*;
 import me.winter.gdx.utils.io.CustomSerializable;
 
 import java.io.IOException;
@@ -17,7 +16,7 @@ import java.io.OutputStream;
  * @author Alexander Winter
  */
 public class SoundFont implements CustomSerializable {
-	Array<Preset> presets;
+	Preset[] presets;
 	float[] fontSamples;
 	Array<Voice> voices;
 	Array<Channel> channels;
@@ -126,7 +125,95 @@ public class SoundFont implements CustomSerializable {
 	}
 
 	private void loadPresets(Hydra hydra) {
+		presets = new Preset[hydra.phdrs.length];
 
+		for(int i = 0; i < hydra.phdrs.length - 1; i++) {
+			PresetHeader presetHeader = hydra.phdrs[i];
+			PresetHeader nextPHeader = hydra.phdrs[i + 1];
+			int sortedIndex = 0;
+			for(int j = 0; j < hydra.phdrs.length; j++) {
+				PresetHeader other = hydra.phdrs[j];
+
+				if(presetHeader == other || other.bank > presetHeader.bank)
+					continue;
+				if(other.bank < presetHeader.bank)
+					sortedIndex++;
+				else if(other.preset > presetHeader.preset)
+					continue;
+				else if(other.preset < other.bank || j < i)
+					sortedIndex++;
+			}
+
+			Preset preset = new Preset();
+
+			preset.name = presetHeader.presetName;
+			preset.bank = presetHeader.bank;
+			preset.preset = presetHeader.preset;
+
+			presets[sortedIndex] = preset;
+			int regionCount = 0;
+
+			for(int pBagIdx = presetHeader.presetBagNdx; pBagIdx < nextPHeader.presetBagNdx; pBagIdx++) {
+				PresetBag bag = hydra.pbags[pBagIdx];
+				PresetBag nextBag = hydra.pbags[pBagIdx + 1];
+				int pLowKey = 0;
+				int pHighKey = 127;
+				int pLowVel = 0;
+				int pHighVel = 127;
+
+				for(int pGenIdx = bag.genNdx; pGenIdx < nextBag.genNdx; pGenIdx++) {
+					GeneratorList gen = hydra.pgens[pGenIdx];
+
+					switch(gen.genOper) {
+						case KEY_RANGE:
+							pLowKey = gen.genAmount.low;
+							pHighKey = gen.genAmount.high;
+							continue;
+
+						case VEL_RANGE:
+							pLowVel = gen.genAmount.low;
+							pHighVel = gen.genAmount.high;
+							continue;
+					}
+
+					if(gen.genOper != GeneratorOperation.INSTRUMENT || gen.genAmount.wordAmount >= hydra.insts.length)
+						continue;
+
+					Instance instance = hydra.insts[gen.genAmount.wordAmount];
+					Instance nextInstance = hydra.insts[gen.genAmount.wordAmount + 1];
+
+					for(int iBagIdx = instance.instBagNdx; iBagIdx < nextInstance.instBagNdx; iBagIdx++) {
+						InstanceBag instanceBag = hydra.ibags[iBagIdx];
+						InstanceBag nextIBag = hydra.ibags[iBagIdx + 1];
+						int iLowKey = 0;
+						int iHighKey = 127;
+						int iLowVel = 0;
+						int iHighVel = 127;
+
+						for(int iGenIdx = instanceBag.instGenNdx; iGenIdx < nextIBag.instGenNdx; iGenIdx++) {
+							GeneratorList iGen = hydra.igens[iGenIdx];
+							switch(iGen.genOper) {
+								case KEY_RANGE:
+									iLowKey = iGen.genAmount.low;
+									iHighKey = iGen.genAmount.high;
+									continue;
+								case VEL_RANGE:
+									iLowVel = iGen.genAmount.low;
+									iHighVel = iGen.genAmount.high;
+									continue;
+								case SAMPLE_ID:
+									if(iHighKey >= pLowKey && iLowKey <= pHighKey && iHighVel >= pLowVel && iLowVel <= pHighVel)
+										regionCount++;
+							}
+						}
+					}
+				}
+			}
+
+			preset.regions = new Region[regionCount];
+
+
+		}
 	}
 
 	@Override

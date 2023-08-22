@@ -16,10 +16,10 @@ import static me.winter.gdx.utils.io.StreamUtil.readUnsignedShort;
  * @author Alexander Winter
  */
 public class GeneratorAmount implements CustomSerializable {
-	int low, high;
-	short shortAmount;
+	public int low, high;
+	public short shortAmount;
 	// unsigned short
-	int wordAmount;
+	public int wordAmount;
 
 	@Override
 	public void readFrom(InputStream input) throws IOException {

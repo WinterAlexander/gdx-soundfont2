@@ -16,15 +16,15 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class Hydra
 {
-	public Array<PresetHeader> phdrs = null;
-	public Array<PresetBag> pbags = null;
-	public Array<ModList> pmods = null;
-	public Array<GeneratorList> pgens = null;
-	public Array<Instance> insts = null;
-	public Array<InstanceBag> ibags = null;
-	public Array<ModList> imods = null;
-	public Array<GeneratorList> igens = null;
-	public Array<SampleHeader> shdrs = null;
+	public PresetHeader[] phdrs = null;
+	public PresetBag[] pbags = null;
+	public ModList[] pmods = null;
+	public GeneratorList[] pgens = null;
+	public Instance[] insts = null;
+	public InstanceBag[] ibags = null;
+	public ModList[] imods = null;
+	public GeneratorList[] igens = null;
+	public SampleHeader[] shdrs = null;
 
 	public boolean isIncomplete() {
 		return phdrs == null || pbags == null || pmods == null
@@ -47,17 +47,18 @@ public class Hydra
 				throw new RuntimeException(ex);
 			}
 		}
+		Array<?> array2 = (Array<?>)array;
 
 		switch(hydraChunkType) {
-			case PHDR: phdrs = array; break;
-			case PBAG: pbags = array; break;
-			case PMOD: pmods = array; break;
-			case PGEN: pgens = array; break;
-			case INST: insts = array; break;
-			case IBAG: ibags = array; break;
-			case IMOD: imods = array; break;
-			case IGEN: igens = array; break;
-			case SHDR: shdrs = array; break;
+			case PHDR: phdrs = array2.toArray((Class<PresetHeader>)hydraChunkType.getClassType()); break;
+			case PBAG: pbags = array2.toArray((Class<PresetBag>)hydraChunkType.getClassType()); break;
+			case PMOD: pmods = array2.toArray((Class<ModList>)hydraChunkType.getClassType()); break;
+			case PGEN: pgens = array2.toArray((Class<GeneratorList>)hydraChunkType.getClassType()); break;
+			case INST: insts = array2.toArray((Class<Instance>)hydraChunkType.getClassType()); break;
+			case IBAG: ibags = array2.toArray((Class<InstanceBag>)hydraChunkType.getClassType()); break;
+			case IMOD: imods = array2.toArray((Class<ModList>)hydraChunkType.getClassType()); break;
+			case IGEN: igens = array2.toArray((Class<GeneratorList>)hydraChunkType.getClassType()); break;
+			case SHDR: shdrs = array2.toArray((Class<SampleHeader>)hydraChunkType.getClassType()); break;
 			default: throw new IllegalArgumentException("Unrecognized HydraChunkType: " + hydraChunkType);
 		}
 	}

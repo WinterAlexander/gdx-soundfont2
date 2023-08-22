@@ -18,9 +18,9 @@ import static me.winter.gdx.utils.io.StreamUtil.readUnsignedShort;
  * @author Alexander Winter
  */
 public class PresetHeader implements CustomSerializable {
-	String presetName;
-	int preset, bank, presetBagNdx;
-	int library, genre, morphology; // unsigned
+	public String presetName;
+	public int preset, bank, presetBagNdx;
+	public int library, genre, morphology; // unsigned
 
 	@Override
 	public void readFrom(InputStream input) throws IOException {

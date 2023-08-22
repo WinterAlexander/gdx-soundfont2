@@ -17,12 +17,12 @@ import static me.winter.gdx.utils.io.StreamUtil.readUnsignedShort;
  */
 public class GeneratorList implements CustomSerializable {
 	// unsigned short
-	int genOper;
-	GeneratorAmount genAmount = new GeneratorAmount();
+	public GeneratorOperation genOper;
+	public GeneratorAmount genAmount = new GeneratorAmount();
 
 	@Override
 	public void readFrom(InputStream input) throws IOException {
-		genOper = readUnsignedShort(input);
+		genOper = GeneratorOperation.fromValue(readUnsignedShort(input));
 		genAmount.readFrom(input);
 	}
 

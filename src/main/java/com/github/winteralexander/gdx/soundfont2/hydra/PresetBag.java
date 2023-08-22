@@ -16,7 +16,8 @@ import static me.winter.gdx.utils.io.StreamUtil.readUnsignedShort;
  * @author Alexander Winter
  */
 public class PresetBag implements CustomSerializable {
-	int genNdx, modNdx;
+	// unsigned short
+	public int genNdx, modNdx;
 
 	@Override
 	public void readFrom(InputStream input) throws IOException {

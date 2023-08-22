@@ -101,14 +101,18 @@ public class SoundFont implements CustomSerializable {
 		if(sampleBuffer == null)
 			throw new IOException("No sample data");
 
-		decodeSamples(hydra, sampleBuffer);
+		decodeSamples(sampleBuffer);
+		loadPresets(hydra);
 	}
 
-	private void decodeSamples(Hydra hydra, byte[] sampleBuffer) {
+	private void decodeSamples(byte[] sampleBuffer) {
 		fontSamples = new float[sampleBuffer.length / 2];
 		for(int i = 0; i < fontSamples.length; i++) {
-
+			int byte1 = Byte.toUnsignedInt(sampleBuffer[i * 2]);
+			int byte2 = Byte.toUnsignedInt(sampleBuffer[i * 2 + 1]);
+			fontSamples[i] = (short)((byte1 << 8) | byte2) / 32767.0f;
 		}
+		outSampleRate = 44100.0f;
 	}
 
 	private byte[] loadSamples(InputStream stream, int sampleLength) throws IOException {
@@ -119,6 +123,10 @@ public class SoundFont implements CustomSerializable {
 			throw new IOException("Incomplete sample data");
 
 		return buffer;
+	}
+
+	private void loadPresets(Hydra hydra) {
+
 	}
 
 	@Override

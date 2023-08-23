@@ -1,12 +1,11 @@
 package com.github.winteralexander.gdx.soundfont2.hydra;
 
-import me.winter.gdx.utils.io.CustomSerializable;
+import com.github.winteralexander.gdx.utils.io.Readable;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
-import static me.winter.gdx.utils.io.StreamUtil.readUnsignedShort;
+import static com.github.winteralexander.gdx.utils.io.StreamUtil.readUnsignedShort;
 
 /**
  * TODO Undocumented :(
@@ -15,7 +14,7 @@ import static me.winter.gdx.utils.io.StreamUtil.readUnsignedShort;
  *
  * @author Alexander Winter
  */
-public class GeneratorList implements CustomSerializable {
+public class GeneratorList implements Readable {
 	// unsigned short
 	public GeneratorOperation genOper;
 	public GeneratorAmount genAmount = new GeneratorAmount();
@@ -24,10 +23,5 @@ public class GeneratorList implements CustomSerializable {
 	public void readFrom(InputStream input) throws IOException {
 		genOper = GeneratorOperation.fromValue(readUnsignedShort(input));
 		genAmount.readFrom(input);
-	}
-
-	@Override
-	public void writeTo(OutputStream outputStream) throws IOException {
-
 	}
 }

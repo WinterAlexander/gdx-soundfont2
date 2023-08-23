@@ -1,13 +1,12 @@
 package com.github.winteralexander.gdx.soundfont2.hydra;
 
-import me.winter.gdx.utils.io.CustomSerializable;
+import com.github.winteralexander.gdx.utils.io.Readable;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
-import static me.winter.gdx.utils.io.StreamUtil.readShort;
-import static me.winter.gdx.utils.io.StreamUtil.readUnsignedShort;
+import static com.github.winteralexander.gdx.utils.io.StreamUtil.readShort;
+import static com.github.winteralexander.gdx.utils.io.StreamUtil.readUnsignedShort;
 
 /**
  * TODO Undocumented :(
@@ -16,7 +15,7 @@ import static me.winter.gdx.utils.io.StreamUtil.readUnsignedShort;
  *
  * @author Alexander Winter
  */
-public class ModList implements CustomSerializable {
+public class ModulatorList implements Readable {
 	// unsigned short
 	int modSrcOper, modDestOper;
 	short modAmount;
@@ -30,10 +29,5 @@ public class ModList implements CustomSerializable {
 		modAmount = readShort(input);
 		modAmtSrcOper = readUnsignedShort(input);
 		modTransOper = readUnsignedShort(input);
-	}
-
-	@Override
-	public void writeTo(OutputStream outputStream) throws IOException {
-
 	}
 }

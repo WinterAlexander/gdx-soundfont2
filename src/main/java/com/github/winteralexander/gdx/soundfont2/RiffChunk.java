@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import static com.github.winteralexander.gdx.soundfont2.SerializationUtilPlus.readAsciiCharArray;
-import static me.winter.gdx.utils.io.StreamUtil.readInt;
+import static com.github.winteralexander.gdx.utils.io.StreamUtil.readInt;
 
 /**
  * TODO Undocumented :(

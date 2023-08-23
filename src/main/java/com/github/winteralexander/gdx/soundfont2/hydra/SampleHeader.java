@@ -1,14 +1,13 @@
 package com.github.winteralexander.gdx.soundfont2.hydra;
 
 import com.github.winteralexander.gdx.soundfont2.SampleLinkType;
-import me.winter.gdx.utils.io.CustomSerializable;
+import com.github.winteralexander.gdx.utils.io.Readable;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import static com.github.winteralexander.gdx.soundfont2.SerializationUtilPlus.readAsciiCharArray;
-import static me.winter.gdx.utils.io.StreamUtil.*;
+import static com.github.winteralexander.gdx.utils.io.StreamUtil.*;
 
 /**
  * TODO Undocumented :(
@@ -17,7 +16,7 @@ import static me.winter.gdx.utils.io.StreamUtil.*;
  *
  * @author Alexander Winter
  */
-public class SampleHeader implements CustomSerializable {
+public class SampleHeader implements Readable {
 	public String sampleName;
 	// unsigned int
 	public int start, end, startLoop, endLoop, sampleRate;
@@ -41,10 +40,5 @@ public class SampleHeader implements CustomSerializable {
 		pitchCorrection = readByte(input);
 		sampleLink = readUnsignedShort(input);
 		sampleType = SampleLinkType.fromValue(readUnsignedShort(input));
-	}
-
-	@Override
-	public void writeTo(OutputStream outputStream) throws IOException {
-
 	}
 }

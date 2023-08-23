@@ -1,14 +1,13 @@
 package com.github.winteralexander.gdx.soundfont2.hydra;
 
-import me.winter.gdx.utils.io.CustomSerializable;
+import com.github.winteralexander.gdx.utils.io.Readable;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import static com.github.winteralexander.gdx.soundfont2.SerializationUtilPlus.readAsciiCharArray;
-import static me.winter.gdx.utils.io.StreamUtil.readInt;
-import static me.winter.gdx.utils.io.StreamUtil.readUnsignedShort;
+import static com.github.winteralexander.gdx.utils.io.StreamUtil.readInt;
+import static com.github.winteralexander.gdx.utils.io.StreamUtil.readUnsignedShort;
 
 /**
  * TODO Undocumented :(
@@ -17,7 +16,7 @@ import static me.winter.gdx.utils.io.StreamUtil.readUnsignedShort;
  *
  * @author Alexander Winter
  */
-public class PresetHeader implements CustomSerializable {
+public class PresetHeader implements Readable {
 	public String presetName;
 	public int preset, bank, presetBagNdx;
 	public int library, genre, morphology; // unsigned
@@ -31,10 +30,5 @@ public class PresetHeader implements CustomSerializable {
 		library = readInt(input);
 		genre = readInt(input);
 		morphology = readInt(input);
-	}
-
-	@Override
-	public void writeTo(OutputStream outputStream) throws IOException {
-
 	}
 }

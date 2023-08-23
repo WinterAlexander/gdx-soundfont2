@@ -1,5 +1,7 @@
 package com.github.winteralexander.gdx.soundfont2;
 
+import com.github.winteralexander.gdx.soundfont2.hydra.GeneratorAmount;
+
 /**
  * TODO Undocumented :(
  * <p>
@@ -10,9 +12,9 @@ package com.github.winteralexander.gdx.soundfont2;
 public class Region {
 	int loop_mode;
 	int sample_rate;
-	byte low_key, high_key, low_velocity, high_velocity;
-	int group, offset, end, loop_start, loop_end;
-	int transpose, tune, pitch_keycenter, pitch_keytrack;
+	byte lowKey, highKey, lowVelocity, highVelocity;
+	int group, offset, end, loopStart, loopEnd;
+	int transpose, tune, pitchKeycenter, pitchKeytrack;
 	float attenuation, pan;
 	Envelope ampEnvelope = new Envelope(), modEnvelope = new Envelope();
 	int initialFilterQ, initialFilterFc;
@@ -26,17 +28,17 @@ public class Region {
 	{
 		loop_mode = 0;
 		sample_rate = 0;
-		low_key = 0;
-		low_velocity = 0;
+		lowKey = 0;
+		lowVelocity = 0;
 
 		group = 0;
 		offset = 0;
 		end = 0;
-		loop_start = 0;
-		loop_end = 0;
+		loopStart = 0;
+		loopEnd = 0;
 		transpose = 0;
 		tune = 0;
-		pitch_keytrack = 0;
+		pitchKeytrack = 0;
 		attenuation = 0.0f;
 		pan = 0.0f;
 		ampEnvelope.clear();
@@ -54,13 +56,13 @@ public class Region {
 		freqVibLFO = 0;
 		vibLfoToPitch = 0;
 
-		high_key = high_velocity = 127;
-		pitch_keycenter = 60;
+		highKey = highVelocity = 127;
+		pitchKeycenter = 60;
 		if(forRelative)
 			return;
 
-		pitch_keytrack = 100;
-		pitch_keycenter = -1;
+		pitchKeytrack = 100;
+		pitchKeycenter = -1;
 
 		ampEnvelope.delay = ampEnvelope.attack = ampEnvelope.hold = ampEnvelope.decay = ampEnvelope.release = -12000.0f;
 		modEnvelope.delay = modEnvelope.attack = modEnvelope.hold = modEnvelope.decay = modEnvelope.release = -12000.0f;
@@ -68,5 +70,14 @@ public class Region {
 		initialFilterFc = 13500;
 		delayModLFO = -12000.0f;
 		delayVibLFO = -12000.0f;
+	}
+
+	public void operator(int genOper, GeneratorAmount generatorAmount, Region otherRegion) {
+		if(generatorAmount != null) {
+			int offset;
+			if(genOper >=)
+		} else {
+
+		}
 	}
 }

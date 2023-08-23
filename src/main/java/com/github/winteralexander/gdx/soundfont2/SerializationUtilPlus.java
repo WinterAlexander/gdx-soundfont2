@@ -3,7 +3,7 @@ package com.github.winteralexander.gdx.soundfont2;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static me.winter.gdx.utils.io.StreamUtil.readUnsignedByte;
+import static com.github.winteralexander.gdx.utils.io.StreamUtil.readUnsignedByte;
 
 /**
  * TODO Undocumented :(

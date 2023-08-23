@@ -1,7 +1,7 @@
 package com.github.winteralexander.gdx.soundfont2.hydra;
 
 import com.badlogic.gdx.utils.Array;
-import me.winter.gdx.utils.io.CustomSerializable;
+import com.github.winteralexander.gdx.utils.io.Readable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,11 +18,11 @@ public class Hydra
 {
 	public PresetHeader[] phdrs = null;
 	public PresetBag[] pbags = null;
-	public ModList[] pmods = null;
+	public ModulatorList[] pmods = null;
 	public GeneratorList[] pgens = null;
-	public Instance[] insts = null;
-	public InstanceBag[] ibags = null;
-	public ModList[] imods = null;
+	public Instrument[] insts = null;
+	public InstrumentBag[] ibags = null;
+	public ModulatorList[] imods = null;
 	public GeneratorList[] igens = null;
 	public SampleHeader[] shdrs = null;
 
@@ -37,7 +37,7 @@ public class Hydra
 		Array array = new Array(count);
 		for(int i = 0; i < count; i++) {
 			try {
-				CustomSerializable obj = hydraChunkType.getClassType().getConstructor().newInstance();
+				Readable obj = hydraChunkType.getClassType().getConstructor().newInstance();
 				obj.readFrom(stream);
 				array.add(obj);
 			} catch(InstantiationException |
@@ -52,11 +52,11 @@ public class Hydra
 		switch(hydraChunkType) {
 			case PHDR: phdrs = array2.toArray((Class<PresetHeader>)hydraChunkType.getClassType()); break;
 			case PBAG: pbags = array2.toArray((Class<PresetBag>)hydraChunkType.getClassType()); break;
-			case PMOD: pmods = array2.toArray((Class<ModList>)hydraChunkType.getClassType()); break;
+			case PMOD: pmods = array2.toArray((Class<ModulatorList>)hydraChunkType.getClassType()); break;
 			case PGEN: pgens = array2.toArray((Class<GeneratorList>)hydraChunkType.getClassType()); break;
-			case INST: insts = array2.toArray((Class<Instance>)hydraChunkType.getClassType()); break;
-			case IBAG: ibags = array2.toArray((Class<InstanceBag>)hydraChunkType.getClassType()); break;
-			case IMOD: imods = array2.toArray((Class<ModList>)hydraChunkType.getClassType()); break;
+			case INST: insts = array2.toArray((Class<Instrument>)hydraChunkType.getClassType()); break;
+			case IBAG: ibags = array2.toArray((Class<InstrumentBag>)hydraChunkType.getClassType()); break;
+			case IMOD: imods = array2.toArray((Class<ModulatorList>)hydraChunkType.getClassType()); break;
 			case IGEN: igens = array2.toArray((Class<GeneratorList>)hydraChunkType.getClassType()); break;
 			case SHDR: shdrs = array2.toArray((Class<SampleHeader>)hydraChunkType.getClassType()); break;
 			default: throw new IllegalArgumentException("Unrecognized HydraChunkType: " + hydraChunkType);

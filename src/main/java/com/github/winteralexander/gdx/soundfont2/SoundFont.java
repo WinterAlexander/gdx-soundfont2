@@ -2,11 +2,10 @@ package com.github.winteralexander.gdx.soundfont2;
 
 import com.badlogic.gdx.utils.Array;
 import com.github.winteralexander.gdx.soundfont2.hydra.*;
-import me.winter.gdx.utils.io.CustomSerializable;
+import com.github.winteralexander.gdx.utils.io.Readable;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * TODO Undocumented :(
@@ -15,7 +14,7 @@ import java.io.OutputStream;
  *
  * @author Alexander Winter
  */
-public class SoundFont implements CustomSerializable {
+public class SoundFont implements Readable {
 	Preset[] presets;
 	float[] fontSamples;
 	Array<Voice> voices;
@@ -125,13 +124,13 @@ public class SoundFont implements CustomSerializable {
 	}
 
 	private void loadPresets(Hydra hydra) {
-		presets = new Preset[hydra.phdrs.length];
+		presets = new Preset[hydra.phdrs.length - 1];
 
 		for(int i = 0; i < hydra.phdrs.length - 1; i++) {
 			PresetHeader presetHeader = hydra.phdrs[i];
 			PresetHeader nextPHeader = hydra.phdrs[i + 1];
 			int sortedIndex = 0;
-			for(int j = 0; j < hydra.phdrs.length; j++) {
+			for(int j = 0; j < hydra.phdrs.length - 1; j++) {
 				PresetHeader other = hydra.phdrs[j];
 
 				if(presetHeader == other || other.bank > presetHeader.bank)
@@ -153,7 +152,9 @@ public class SoundFont implements CustomSerializable {
 			presets[sortedIndex] = preset;
 			int regionCount = 0;
 
-			for(int pBagIdx = presetHeader.presetBagNdx; pBagIdx < nextPHeader.presetBagNdx; pBagIdx++) {
+			for(int pBagIdx = presetHeader.presetBagNdx;
+			    pBagIdx < nextPHeader.presetBagNdx;
+				pBagIdx++) {
 				PresetBag bag = hydra.pbags[pBagIdx];
 				PresetBag nextBag = hydra.pbags[pBagIdx + 1];
 				int pLowKey = 0;
@@ -176,21 +177,26 @@ public class SoundFont implements CustomSerializable {
 							continue;
 					}
 
-					if(gen.genOper != GeneratorOperation.INSTRUMENT || gen.genAmount.wordAmount >= hydra.insts.length)
+					if(gen.genOper != GeneratorOperation.INSTRUMENT
+							|| gen.genAmount.wordAmount >= hydra.insts.length)
 						continue;
 
-					Instance instance = hydra.insts[gen.genAmount.wordAmount];
-					Instance nextInstance = hydra.insts[gen.genAmount.wordAmount + 1];
+					Instrument instrument = hydra.insts[gen.genAmount.wordAmount];
+					Instrument nextInstrument = hydra.insts[gen.genAmount.wordAmount + 1];
 
-					for(int iBagIdx = instance.instBagNdx; iBagIdx < nextInstance.instBagNdx; iBagIdx++) {
-						InstanceBag instanceBag = hydra.ibags[iBagIdx];
-						InstanceBag nextIBag = hydra.ibags[iBagIdx + 1];
+					for(int iBagIdx = instrument.instBagNdx;
+					    iBagIdx < nextInstrument.instBagNdx;
+					    iBagIdx++) {
+						InstrumentBag instrumentBag = hydra.ibags[iBagIdx];
+						InstrumentBag nextIBag = hydra.ibags[iBagIdx + 1];
 						int iLowKey = 0;
 						int iHighKey = 127;
 						int iLowVel = 0;
 						int iHighVel = 127;
 
-						for(int iGenIdx = instanceBag.instGenNdx; iGenIdx < nextIBag.instGenNdx; iGenIdx++) {
+						for(int iGenIdx = instrumentBag.instGenNdx;
+						    iGenIdx < nextIBag.instGenNdx;
+						    iGenIdx++) {
 							GeneratorList iGen = hydra.igens[iGenIdx];
 							switch(iGen.genOper) {
 								case KEY_RANGE:
@@ -202,7 +208,10 @@ public class SoundFont implements CustomSerializable {
 									iHighVel = iGen.genAmount.high;
 									continue;
 								case SAMPLE_ID:
-									if(iHighKey >= pLowKey && iLowKey <= pHighKey && iHighVel >= pLowVel && iLowVel <= pHighVel)
+									if(iHighKey >= pLowKey
+											&& iLowKey <= pHighKey
+											&& iHighVel >= pLowVel
+											&& iLowVel <= pHighVel)
 										regionCount++;
 							}
 						}
@@ -212,12 +221,70 @@ public class SoundFont implements CustomSerializable {
 
 			preset.regions = new Region[regionCount];
 
+			Region globalRegion = new Region();
+			globalRegion.clear(true);
 
+			for(int pBagIdx = presetHeader.presetBagNdx;
+			    pBagIdx < nextPHeader.presetBagNdx;
+				pBagIdx++) {
+				PresetBag bag = hydra.pbags[pBagIdx];
+				PresetBag nextBag = hydra.pbags[pBagIdx + 1];
+				Region presetRegion = globalRegion;
+				int hadGenInstrument = 0;
+				for(int pGenIdx = bag.genNdx;
+					pGenIdx < nextBag.genNdx;
+					pGenIdx++) {
+					GeneratorList gen = hydra.pgens[pGenIdx];
+
+					if(gen.genOper == GeneratorOperation.INSTRUMENT) {
+
+						int instIdx = gen.genAmount.wordAmount;
+						if(instIdx >= hydra.insts.length)
+							continue;
+
+						Region instrumentRegion = new Region();
+						instrumentRegion.clear(false);
+						Instrument instrument = hydra.insts[instIdx];
+						Instrument nextInstrument = hydra.insts[instIdx + 1];
+						for(int iBagIdx = instrument.instBagNdx;
+						    iBagIdx < nextInstrument.instBagNdx;
+							iBagIdx++) {
+							InstrumentBag instrumentBag = hydra.ibags[iBagIdx];
+							InstrumentBag nextIBag = hydra.ibags[iBagIdx + 1];
+
+							Region zoneRegion = instrumentRegion;
+							int hadSampleID = 0;
+
+							for(int iGenIdx = instrumentBag.instGenNdx;
+							    iGenIdx < nextIBag.instGenNdx;
+								iGenIdx++) {
+								GeneratorList generatorList = hydra.igens[iGenIdx];
+
+								if(generatorList.genOper == GeneratorOperation.SAMPLE_ID) {
+									if(zoneRegion.highKey < presetRegion.lowKey
+											|| zoneRegion.lowKey > presetRegion.highKey)
+										continue;
+									if(zoneRegion.highVelocity < presetRegion.lowVelocity
+											|| zoneRegion.lowVelocity > presetRegion.highVelocity)
+										continue;
+									if(presetRegion.lowKey > zoneRegion.lowKey)
+										zoneRegion.lowKey = presetRegion.lowKey;
+									if(presetRegion.highKey < zoneRegion.highKey)
+										zoneRegion.highKey = presetRegion.highKey;
+									if(presetRegion.lowVelocity > zoneRegion.lowVelocity)
+										zoneRegion.lowVelocity = presetRegion.lowVelocity;
+									if(presetRegion.highVelocity < zoneRegion.highVelocity)
+										zoneRegion.highVelocity = presetRegion.highVelocity;
+
+
+									zoneRegion.operator(0, null, presetRegion);
+
+								}
+							}
+						}
+					}
+				}
+			}
 		}
-	}
-
-	@Override
-	public void writeTo(OutputStream outputStream) throws IOException {
-
 	}
 }
